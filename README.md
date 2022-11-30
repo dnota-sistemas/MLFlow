@@ -1,3 +1,8 @@
 # MLFlow
 
-Herramienta Open Source para gestionar el ciclo de vida de los modelos de machine learning y seguir el ciclo de vida de MLOps.
+Para iniciarlo realizamos los dos siguientes comandos
+
+```
+docker-compose build --no-cache
+docker-compose up -d --force-recreate
+```
