@@ -28,7 +28,7 @@ services:
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
             - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-        command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --serve-artifacts --host 0.0.0.0    
+        command: mlflow server --backend-store-uri mysql+pymysql://root:root@db:3306/mlflow --serve-artifacts --host 0.0.0.0    
 
         volumes:
             - artifactroot:/mlflow/artifactroot
@@ -36,7 +36,7 @@ services:
     nginx:
         restart: always
         build: ./nginx
-        #image: mlflow_nginx
+        image: mlflow_nginx
         container_name: mlflow_nginx
         ports:
             - "80:80"
