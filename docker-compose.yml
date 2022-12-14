@@ -4,8 +4,8 @@ services:
     db:
         restart: always
         image: mysql/mysql-server:5.7.28
-        expose:
-            - "3306"
+        #expose:
+        #    - "3306"
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
             - MYSQL_USER=${MYSQL_USER}
@@ -18,8 +18,8 @@ services:
         restart: always
         build: ./mlflow
         image: adacotechjp/mlflow:2.0.1
-        expose:
-            - "5000"
+        #expose:
+        #    - "5000"
         depends_on:
             - db
         environment:
