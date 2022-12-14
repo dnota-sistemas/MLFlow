@@ -16,10 +16,10 @@ services:
 
     web:
         #restart: always
-        #build: ./mlflow
+        build: ./mlflow
         image: adacotechjp/mlflow:2.0.1
-        #expose:
-        #    - "5000"
+        expose:
+            - "5000"
         depends_on:
             - db
         environment:
