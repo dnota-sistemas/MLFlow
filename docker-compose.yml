@@ -7,6 +7,8 @@ services:
         container_name: mlflow_db
         expose:
             - "3306"
+        networks:
+            - backend
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
             - MYSQL_USER=${MYSQL_USER}
@@ -22,6 +24,9 @@ services:
         container_name: mlflow_server
         expose:
             - "5000"
+        networks:
+            - frontend
+            - backend
         depends_on:
             - db
         environment:
@@ -36,12 +41,20 @@ services:
     nginx:
         restart: always
         build: ./nginx
-        #image: mlflow_nginx
+        image: mlflow_nginx
         container_name: mlflow_nginx
         ports:
             - "80:80"
+        networks:
+            - frontend
         depends_on:
             - web
+
+networks:
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge
 
 volumes:
     dbdata:
