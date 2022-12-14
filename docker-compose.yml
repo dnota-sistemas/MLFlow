@@ -6,7 +6,7 @@ services:
         image: mysql/mysql-server:5.7.28
         #container_name: mlflow_db
         expose:
-            - 3306
+            - "3306"
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
             - MYSQL_USER=${MYSQL_USER}
@@ -21,7 +21,7 @@ services:
         image: adacotechjp/mlflow:2.0.1
         #container_name: mlflow_server
         expose:
-            - 5000
+            - "5000"
         depends_on:
             - db
         environment:
@@ -39,7 +39,7 @@ services:
         #image: mlflow_nginx:latest
         #container_name: mlflow_nginx
         ports:
-            - 80:80
+            - "80:80"
         depends_on:
             - web
 
