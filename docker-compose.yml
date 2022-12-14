@@ -7,8 +7,6 @@ services:
         container_name: mlflow_db
         expose:
             - ${DB_PORT}
-        networks:
-            - mydefault
         ports:
             - "${DB_PORT}:${DB_PORT}"
         environment:
@@ -23,8 +21,6 @@ services:
         build: ./mlflow
         image: mlflow_server
         container_name: mlflow_server
-        networks:
-            - mydefault
         expose:
             - ${MLFLOW_PORT}
         ports:
@@ -50,12 +46,6 @@ services:
                 --default-artifact-root $${ARTIFACTS}
         depends_on:
             - db
-
-
-
-networks:
-    mydefault:
-        driver: bridge
 
 volumes:
     db_datapg:
