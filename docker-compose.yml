@@ -4,7 +4,6 @@ services:
     db:
         restart: always
         image: mysql/mysql-server:5.7.28
-        container_name: mlflow_db
         expose:
             - "3306"
         environment:
@@ -19,7 +18,6 @@ services:
         restart: always
         build: ./mlflow
         image: adacotechjp/mlflow:2.0.1
-        container_name: mlflow_server
         expose:
             - "5000"
         depends_on:
@@ -36,7 +34,6 @@ services:
     nginx:
         restart: always
         build: nginx
-        container_name: mlflow_nginx
         ports:
             - "80:80"
         depends_on:
