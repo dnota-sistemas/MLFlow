@@ -19,8 +19,8 @@ services:
     app:
         restart: always
         build: ./mlflow
-        image: mlflow_server
-        container_name: mlflow_server
+        #image: mlflow_server
+        #container_name: mlflow_server
         expose:
             - ${MLFLOW_PORT}
         ports:
