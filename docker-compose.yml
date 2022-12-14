@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
     db:
-        restart: always
+        #restart: always
         image: mysql/mysql-server:5.7.28
         #expose:
         #    - "3306"
@@ -15,8 +15,8 @@ services:
             - dbdata:/var/lib/mysql
 
     web:
-        restart: always
-        build: ./mlflow
+        #restart: always
+        #build: ./mlflow
         image: adacotechjp/mlflow:2.0.1
         #expose:
         #    - "5000"
@@ -32,8 +32,8 @@ services:
             - artifactroot:/mlflow/artifactroot
 
     nginx:
-        restart: always
-        build: nginx
+        #restart: always
+        #build: nginx
         ports:
             - "80:80"
         depends_on:
