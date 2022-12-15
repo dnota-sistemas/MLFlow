@@ -3,50 +3,40 @@ version: '3.3'
 services:
     db:
         restart: always
-        image: postgres:latest
+        image: mysql/mysql-server:5.7.28
         container_name: mlflow_db
         expose:
-            - ${DB_PORT}
-        ports:
-            - "${DB_PORT}:${DB_PORT}"
+            - "3306"
         environment:
-            - POSTGRES_DB=${DB_NAME}
-            - POSTGRES_USER=${DB_USER}
-            - POSTGRES_PASSWORD=${DB_PW}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         volumes:
-            - db_datapg:/var/lib/postgresql/data
+            - dbdata:/var/lib/mysql
 
-    app:
+    web:
         restart: always
         build: ./mlflow
-        #image: mlflow_server
-        #container_name: mlflow_server
-        expose:
-            - ${MLFLOW_PORT}
-        ports:
-            - "${MLFLOW_PORT}:${MLFLOW_PORT}"
-        environment:
-            - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
-            - ARTIFACTS=/mlruns
-          # For artifact store in AWS S3 (note boto was installed in container):
-          #  - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-          #  - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-          #  - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-          #  - ARTIFACTS="s3://mlflow_bucket/mlflow/"
-        volumes:
-            - mlrun_data:/mlruns
-
-        command: 
-            - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
-            - -c
-            - mlflow server 
-                --port ${MLFLOW_PORT} 
-                --host 0.0.0.0 
-                --backend-store-uri $${BACKEND} 
-                --default-artifact-root $${ARTIFACTS}
+        image: adacotechjp/mlflow:2.0.1
+        container_name: mlflow_server
         depends_on:
             - db
+        command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --serve-artifacts --host 0.0.0.0    
+
+        volumes:
+            - artifactroot:/mlflow/artifactroot
+
+    nginx:
+        restart: always
+        build: ./nginx
+        image: nginx:alpine
+        container_name: mlflow_nginx
+        ports:
+            - "80:80"
+        depends_on:
+            - web
 
 volumes:
-    db_datapg:
-    mlrun_data:
+    dbdata:
+    artifactroot:
